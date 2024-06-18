@@ -1,5 +1,62 @@
 JSON->JAVA SCRIPT OBJECT NOTATION
    ->json is lang independent.Ex:take react or any front tech and spring or any backend tech,They can communicate easily with the help of json.
       (machine to machine communication)
+   ->can be used with any programming language.
+   ->we can store/exchange data.
+  ex:
+      {
+	    "name""vivek",                                      
+		"address":"VZG",
+		"mobile"93923,                        
+		"isPanAvailable":true,
+		"langKnown":["python","java"]
+	  }
+	
+----------------------------------------------------------------------------------
+  EX:
+     {
+	 "name":"vivek",
+	 "id":1
+	 }
+	   |
+	   |  (DATA BINDING,Reading data from json and binding data to the java class)
+	   |
+	class Student
+	{
+	  String name;
+	  int id;
+	}
+
+      (JSON->JAVA):
+->In order to bind the data from json to java object,we need jackson-databind maven dependency.
+  EX:consider a json file 'student.json' with some specific file location 'x'.If we want to read the values of json and set the values to 
+      corresponding Student object values.we can do it in the following way.
+	  
+	  p s v m(s[] args)
+	  {
+	    ObjectMapper obj=new ObjectMapper();
+		Student stu=obj.readValue(new File(x),Student.class);
+      }
+	  
+	 ->ObjectMapper is from 'com.fasterxml.jackson.databind' pkg.
+	* ->Instead of specificying the path of json,we can directly place a json object as first parameter of readValue function.It will work as the same.
+
+      (JAVA->JSON):
+->If we want to create a json object using the java object ,we have to do in the following way.
+  
+   p s v m(s[] args)
+   {
+     ObjectMapper obj=new ObjectMapper();
+	 
+	 Student st=new Student();
+	 st.setName("vivek");
+	 st.setId(12);
+	 
+	 obj.writeValue(new File(x),st);
+	}
+
+
+
+
 
 	
