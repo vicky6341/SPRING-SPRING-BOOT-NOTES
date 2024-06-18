@@ -19,7 +19,7 @@ JSON->JAVA SCRIPT OBJECT NOTATION
 	 "id":1
 	 }
 	   |
-	   |  (DATA BINDING,Reading data from json and binding data to the java class)
+	   |  (DATA BINDING,Reading data from json and binding data to the java object)
 	   |
 	class Student
 	{
