@@ -19,7 +19,7 @@ JSON->JAVA SCRIPT OBJECT NOTATION
 	 "id":1
 	 }
 	   |
-	   |  (DATA BINDING,Reading data from json and binding data to the java object)
+	   |  (DATA BINDING,Reading data from json and binding data to the java class)
 	   |
 	class Student
 	{
@@ -55,6 +55,49 @@ JSON->JAVA SCRIPT OBJECT NOTATION
 	 obj.writeValue(new File(x),st);
 	}
 
+*->If we have the more properties in the json  than in Java class,we get the exception as "unrecognized properties".
+    |
+	In this case we can ignore the unknown properties by specifying in the following way:
+	 
+	@JsonIgnoreProperties(ignoreUnknown=true)
+	public class Student
+	{
+	}
+	                       (OR)
+	If we want to ignore some specific properties ,then we can specify in the following way:(In the below example,name value of json will not set to field value,so now the value of java field name
+	   will be null as it is the default value of string in java)
+	
+	@JsonIgnoreProperties(value="name")    -> we can specify the multiple properties as "value={"name","id"}"
+	public class Student
+	{
+	}
+
+*->If our pojo have a field named "isActive" then idle will generate getter and setter in the following way:
+   |
+   getter method-> isActive() 
+   setter method-> setActive()
+   For the value to be bind to the field of java pojo ,we have to make the change in the field name as "getIsActive" other wise the value will not be bind.
+                 OR
+   we can specify using annotation in the following way.
+      @JsonProperty("isActive")  ->[recommended to use]
+	  private boolean isActive;
+	  
+->If we have the field name as "FullName" in json and out java class as field name as "name"
+   we can specify as the following to set the value of fullName to the name:
+       @JsonProperty("fullName")
+	   private String name;
+
+->If we have list of json objects in the json file ,we can set those in the following way:
+
+  ObjectMapper obj=new ObjectMapper();
+  Student[] st=obj.readValue(new File(x),Student[].class)
+  
+  
+
+
+
+	
+	
 
 
 
