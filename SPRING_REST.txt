@@ -1,0 +1,5 @@
+JSON->JAVA SCRIPT OBJECT NOTATION
+   ->json is lang independent.Ex:take react or any front tech and spring or any backend tech,They can communicate easily with the help of json.
+      (machine to machine communication)
+
+	
