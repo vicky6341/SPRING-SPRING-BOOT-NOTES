@@ -91,6 +91,29 @@ JSON->JAVA SCRIPT OBJECT NOTATION
 
   ObjectMapper obj=new ObjectMapper();
   Student[] st=obj.readValue(new File(x),Student[].class)
+---------------------------------------------------------------------------------------------------------------------
+->@RestController -> A convenience annotation that is itself annotated with @Controller and @ResponseBody.
+
+-> if we dont use @ResponseBody at the class level or method level ,It will return a page with the name with return string.
+   but if we use @ResponseBody then it ill return a string.
+   --------------------------------------------------------------------------------------------------------------------
+   spring rest:
+	    ->add jackson-databind dependecy in the pom and add @EnableWebMvc annotation at the class level in config file to convert json to java obj and java obj to json.
+		->add jackson-datasource-xml in the pom to produce the output in xml format.
+		->In order to get data in required format we can add the Accept(key) in request header in postman with value application/json (or) application/xml.
+		->To negotiate the content we have to add the key produces with value as MediaType.Application_Json_Value or MediaType.Application_XML_value.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+uri-> ..../{id}
+       ->@PathVariable("id") int id;
+	   -> if name of the path variable and parameter are both same then there is no need to specify name beside @pathvariable.
+uri->....?id=1&name=vivek&country=india
+        ->@RequestParam("id) int id,@RequestParam("name") String name,@RequestParam("country") String country;
+If a controller having two apis with the uri's .../{id} & ...../{name} then there is an ambiguity so ,we can resolve this by using params.i.e..
+    @GetMapping(value="/student/{id}",params="xyz")
+	@GetMapping(value="/student/{name}",params="yyy")
+->In order to map the json object values with the java object,we have to use the @RequestBody annotation.
+
+
   
   
 
