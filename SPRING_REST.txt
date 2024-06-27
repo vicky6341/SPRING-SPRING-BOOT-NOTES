@@ -120,7 +120,40 @@ If a controller having two apis with the uri's .../{id} & ...../{name} then ther
 ->For that we have to return "ResponseEntity<ReturnType>" .while returning we have to use the following line
      "ResponseEntity.status(HttpStatus.CREATED).body(......)"
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
+Handling Exceptions:
+ 
+1)Create a pkg exception and write excpetion classes in that as following.
+  
+  public class StudentNotFoundException extends Exceptions
+  {
+	public StudentNotFoundException(String msg)
+	{
+		super(msg);
+	}
+  }
 
+2)write a handler method for that exception
+  
+  @ExceptionHandler
+  public ResponseEntity<ErrorResponse> handleExcp(StudentNotFoundException snf)
+  {
+	ErrorResponse err=new ErrorResponse();
+	err.set..();
+	..
+	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
+  }
+
+->For every exception that we are throwing in our business logic ,we have to handle that exception.
+->Instead of writing the handling code in one controller for that controller class,we have to write the code at global level.so,that it will be handled for all the controllers.
+ex:
+  
+  @ControllerAdvice
+  class GlobalExceptionHandler
+  {
+	@ExceptionHandler
+	........
+  }
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
   
   
