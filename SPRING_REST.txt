@@ -112,6 +112,14 @@ If a controller having two apis with the uri's .../{id} & ...../{name} then ther
     @GetMapping(value="/student/{id}",params="xyz")
 	@GetMapping(value="/student/{name}",params="yyy")
 ->In order to map the json object values with the java object,we have to use the @RequestBody annotation.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+->if our api wants to consume the data in the form of json only,we can specify using the consumes=MediaType.APPLICATION_JSON_VALUE and similarly for xml too.
+      we have to add "content-Type" as application/json or application/xml in request headers while using "consumes".
+	  similarly "Accept" while using "produces".
+->while giving response from our api,along with return type we have to give a proper http status code.
+->For that we have to return "ResponseEntity<ReturnType>" .while returning we have to use the following line
+     "ResponseEntity.status(HttpStatus.CREATED).body(......)"
+------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
   
