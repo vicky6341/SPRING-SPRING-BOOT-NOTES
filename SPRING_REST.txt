@@ -155,9 +155,35 @@ ex:
   }
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-  
-  
+  1)
 
+    @ExceptionHandler
+	ResponseEntity<StudentErrorResponse> handleException(IOException snf)
+	{
+		StudentErrorResponse sr=new StudentErrorResponse();
+		sr.setDate(new Date());
+		sr.setErrorClass(snf.getClass().toString());---->1
+		sr.setErrorMessage(sr.getMessage());---------->2
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(sr);
+	}
+  
+  2)
+     @ExceptionHandler(value=IOException.class)
+	 .........
+	 ..............
+	 ...............
+
+->Above two codes are for handling the requests only but in first case,we can able to hold the exception object.
+  so that we can execute marked 1 and 2 line(i.e.165 & 166).
+->following was the sample code to update data :
+  
+    @PutMapping("/student/{id}")
+	public ResponseEntity<...> updateStudent(@PathVriable int id,@RequestBody Student st)
+	{
+		..............................
+		..............................
+	}
+	---------------------------------------------------------------------------------------------------------------------------------------
 
 
 	
