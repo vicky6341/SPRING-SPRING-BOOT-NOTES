@@ -258,6 +258,40 @@ ex:
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
 
+->While calling any rest api using restTemplate there may be a chance of getting error.
+  So, for that we have to create a error handler and handle the code as following.
+
+  ex:
+	 @GetMapping("/fetch")
+	 public String fetchData()
+	 {
+		String url="....";
+		restTemplate.setErrorHandler(new AppExceptionHandler());
+		String str=restTemplate.getForObject(url,String.class);
+		System.out.println(str);
+		return str;
+	 }
+
+	 Following was the AppExceptionHandler class:
+
+	 @Component
+	 public class AppExceptionHandler implements ResponseErrorHandler
+     {
+		ResponseErrorHandler eh=new DefaultResponseErrorHandler();
+		
+		@Override
+		public boolean hasError(ClientHttpResponse res) throws IOException{
+			return eh.hasError(res);
+		}
+
+		@Override
+        public void handleError(ClientHttpResponse res) throws IOException{
+			throw new CustomException();
+		} 
+	 }
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 
 
 
