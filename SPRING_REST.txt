@@ -219,6 +219,47 @@ ex:
 	restTemplate.postForObject(url,req,Student.class);
   }
 
+  -------------------------------------------------------------------------------------------------------------------------------------------
+  1)restTemplate.getForObject -> is to get body of the response.
+  2)restTemplate.getForEntity -> is to get ResponseEntity of the response(i.e.. including body,headers,cookies etc..)
+
+  ex:
+     @GetMapping("/fetch")
+	 public String fetch()
+	 {
+		ResponseEntity<Student> resEnt=restTemplate.getForEntity(url,Student.class);
+		HttpHeaders headers=resEnt.getHeaders()  //to get headers from ResponseEntity
+		Student s=resEnt.getBody()   //to get body from the ResponseEntity
+		HttpStatus statusCode=resEnt.getStatusCode();  //to get status code from ResponseEntity
+	 }
+->In order to get the headers of response ,we have to do in the following way:
+  
+  Set<String> ks=headers.keySet();
+  for(String k:ks){
+	String value=headers.getFirst(k);
+	System.out.println(k+" "+value);
+  }
+
+->Consider an url : [...../student/1] which as to passed as a parameter to the getForEntity method,
+    In the above url ,everytime the number '1' is not constant.It keeps on changing so,we have to make it as dynamic in the following way:
+
+	String url="...../{api}/{id}
+	ResponseEntity<Student> res=restTemplate.getForEntity(url,Student.class,"student",1);
+
+->We can pass any number of parameters to the above method according to the dynamic variables in the  url.
+  {api} will be replaced with "student" and {id} will be replaced with 1. and the order should be important.
+
+->we can also do it in the following way by creating map
+
+  HashMap<String,Object> m=new HashMap<>();
+  m.put("api","student");
+  m.put("id",2);
+  ....=...getForEntity(url,Student.class,m);
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
 
 	
 	
