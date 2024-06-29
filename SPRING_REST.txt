@@ -94,8 +94,8 @@ JSON->JAVA SCRIPT OBJECT NOTATION
 ---------------------------------------------------------------------------------------------------------------------
 ->@RestController -> A convenience annotation that is itself annotated with @Controller and @ResponseBody.
 
--> if we dont use @ResponseBody at the class level or method level ,It will return a page with the name with return string.
-   but if we use @ResponseBody then it ill return a string.
+-> if we dont use @ResponseBody at the class level or method level ,It will look for a view(page) with the name with return string.
+   but if we use @ResponseBody then it will return a string.
    --------------------------------------------------------------------------------------------------------------------
    spring rest:
 	    ->add jackson-databind dependecy in the pom and add @EnableWebMvc annotation at the class level in config file to convert json to java obj and java obj to json.
@@ -184,6 +184,40 @@ ex:
 		..............................
 	}
 	---------------------------------------------------------------------------------------------------------------------------------------
+->For making rest api calls ,we use RestTemplate in the follwing way:
+
+  ex:
+      @GetMapping("/student")
+	  public String fetchData()
+	  {
+		Student st=restTemplate.getForObject(url,Student.class);
+		...................
+	  }
+	
+->Before doing that ,we have to create a bean for RestTemplate.i.e.. in the config file.
+
+ @Bean
+ public RestTemplate restTemplateObj()
+ {
+	return new RestTemplate();
+ }
+
+->for the post http request ,we have to do it in the following way:
+
+  @GetMapping
+  public String fetchData()
+  {
+	HttpHeaders httpHeader=new HttpHeaders();
+	httpHeader.add("Accept","application/json);
+	httpHeader.add("Content-Type","application/json");
+
+	Student st=new Student();
+	.......
+
+	HttpEntity req=new HttpEntity(st,httpHeader);  ->HttpEntity(body,header)
+
+	restTemplate.postForObject(url,req,Student.class);
+  }
 
 
 	
