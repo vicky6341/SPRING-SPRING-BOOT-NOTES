@@ -261,6 +261,12 @@ ex:
 ->While calling any rest api using restTemplate there may be a chance of getting error.
   So, for that we have to create a error handler and handle the code as following.
 
+***Custom ResponseErrorHandler:
+->Implement the ResponseErrorHandler interface to create a custom error handler.
+->Override the hasError method to determine if the response has an error.
+->Override the handleError method to handle the error.
+->Set the custom error handler on the RestTemplate instance using setErrorHandler.
+
   ex:
 	 @GetMapping("/fetch")
 	 public String fetchData()
@@ -289,6 +295,32 @@ ex:
 			throw new CustomException();
 		} 
 	 }
+->We can use exchange method(generic) to call any method of type like get,post,put,delete etc..
+Here is the following example code:
+
+ import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
+public class RestTemplateGetExample {
+    public static void main(String[] args) {
+        RestTemplate restTemplate = new RestTemplate();
+        
+        String url = "https://api.example.com/resource/1";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer your_token_here");
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+
+        System.out.println("Response: " + response.getBody());
+    }
+}
+
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
