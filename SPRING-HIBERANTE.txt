@@ -1,0 +1,68 @@
+->DataSource - how we are connecting to a database.
+             - In order to connect java application with the databaase.It needs datasource.
+             - Datasource internally manages the connections.
+
+->Add hibernate-core dependency to the pom.
+
+1)hibernate.cfg.xml:
+<?xml..................>
+<DOCTYPEf ..............>
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/hibernate-morning</property>
+    <property name="hibernate.connection.username">root</property>
+    <property name="hibernate.connection.password">vivek</property>
+    <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+  </session-factory>
+</hibernate-configuration>
+
+->Inorder to work with hiberate ,we have to do the following :
+  ->First we need session object to perform database operations with hibernate.
+  ->Inorder to initialize the session object,we need session factory.
+  ->To create a sessionFactory we need some configurations regarding the database.
+
+2)code:
+p s v m(s[] srgs)
+{
+    //create configuration
+    Configuration con=new Configuration();
+    con.configure("hibernate.connection.cfg.xml");
+    con.addAnnotatedClass(Song.class);
+
+    //create sessionFactory
+    SessionFactory sf=con.buildSessionFactory();
+
+    //initialize the session object
+    Session s=sf.openSession();
+
+    Song s1=new Song();
+    s1.setId(1);
+    s1.setSongName("rim zim");
+    s1.setArtist("vivek");
+    
+    session.beginTransaction();
+    session.save(s1);
+    session.getTransaction().commit();
+}
+
+3)entity: This entity represents table in a database.
+
+@Entity -------------->javax.persistence.Entity
+public class Song{
+
+    @Id  --------------->javax.persistence.Id
+    @Column(name="songId")
+    private int id;
+    
+    @Column(name="songName")
+    private String songName;
+
+    @Column(name="singer")
+    private String artist;
+
+    setters and getters....
+}
+
+->If we configure the  following property in hibernate.cfg,xml,Then it will enable logging of generate sql to the console.
+   
+   [ <Property name="hibernate.show_sql"> true</property> ]
