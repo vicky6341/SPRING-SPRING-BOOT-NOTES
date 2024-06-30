@@ -38,7 +38,7 @@ JSON->JAVA SCRIPT OBJECT NOTATION
 		Student stu=obj.readValue(new File(x),Student.class);
       }
 	  
-	 ->ObjectMapper is from 'com.fasterxml.jackson.databind' pkg.
+	 ->ObjectMapper is from 'com.fasterxml.jackson-databind' pkg.
 	* ->Instead of specificying the path of json,we can directly place a json object as first parameter of readValue function.It will work as the same.
 
       (JAVA->JSON):
@@ -323,7 +323,19 @@ public class RestTemplateGetExample {
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+->we can set the readtimeout and server time out while creating RestTemplate object in the following way:
 
+@Bean
+public RestTemplate restTemplateObj()
+{
+	SimpleClientHttpRequestFactory s=new SimpleClientHttpRequestFactory();
+	s.setReadTimeOut(200);
+	s.setConnectTimeOut(100);
+	RestTemplate rt=new RestTemplate(s);
+	return rt;
+}
+->For the above gateway exceptions like connection time out and read time out ResponseErrorHandler will not work,We have to use try-catch to handle exceptions.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
