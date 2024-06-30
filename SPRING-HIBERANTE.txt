@@ -66,3 +66,39 @@ public class Song{
 ->If we configure the  following property in hibernate.cfg,xml,Then it will enable logging of generate sql to the console.
    
    [ <Property name="hibernate.show_sql"> true</property> ]
+
+->we no need to give "hibernate.cfg.xml" as a parameter to configure.It will always look for that file ,if don't pass as a parameter.
+  But,If we name it with different name we should pass the parameter.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+session.get(Song.class,2) -> will get the record based on song id with value '2'
+session.load(Song.class,2) ->It will also do the same.
+->Inorder to update and delete any record,we have to load that record first.
+ex:
+   1)Song s=session.get(Song.class,1);
+     s.setName("....");
+     session.update(s);
+   2)Song s=session.get(Song.class,1);
+     session.beginTransaction();
+     session.delete(s);
+     session.getTransaction().commit();
+
+->As SessionFactory object is heavy weight obj,we have to create only one SessionFactory in our application.
+ So,we can make a Singleton util class that is having a method which returns only one SessionFactory object everytime.
+
+public class HibernateUtils
+{
+      private static SessionFactory sf=null;
+      public static SessionFactory getSessionFactory()
+      {
+        if(sf==null)
+        {
+            Configuration con=new Configuration();
+            con.configure();
+            con.addAnnotatedClass(Song.class);
+
+            sf=con.buildSessionFactory();
+        }
+        return sf;
+      }
+}
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
