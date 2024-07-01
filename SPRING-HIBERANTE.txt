@@ -168,6 +168,153 @@ ex:
 1)Transient State: The object is not associated with a session and not represented in the database.
 2)Persistent State: The object is associated with an active session and is represented in the database. Changes to the object are automatically synchronized with the database.
 3)Detached State: The object was previously persistent but is no longer associated with any session. Changes to the object are not synchronized with the database unless explicitly reattached to a session.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+->In Hibernate, dirty checking is a mechanism that automatically detects changes made to persistent objects and synchronizes those changes with the database.
+This feature is only applicable to persistent objects, as transient objects are not managed by Hibernate and therefore do not participate in dirty checking.
+
+->Dirty Checking with Persistent Objects:
+   Dirty checking works with objects that are in the persistent state. When you modify a persistent object within a transaction, Hibernate keeps track of these changes and automatically updates the corresponding 
+   database records when the transaction is committed.
+
+Here's an example to illustrate dirty checking with a persistent object:
+                Session session = sessionFactory.openSession();
+                session.beginTransaction();
+
+                // Load a persistent object from the database
+                User user = session.get(User.class, 1);
+
+                // Modify the persistent object
+                user.setEmail("new.email@example.com");
+
+                // No explicit update call is needed
+                session.getTransaction().commit();
+                session.close();
+
+             In this example:  
+                                When commit() is called, Hibernate performs dirty checking, detects the change, and generates the appropriate UPDATE SQL statement to synchronize the database with the 
+                                in-memory state of the User object.
+
+->Transient Objects and Dirty Checking:
+   Transient objects are not managed by Hibernate, so dirty checking does not apply to them. Changes to transient objects are not tracked, and Hibernate will not
+   synchronize these changes with the database unless the object is explicitly saved or persisted, transitioning it to a persistent state.
+
+Here's an example to illustrate that dirty checking does not apply to transient objects:
+ 
+                    // Create a transient object
+                    User user = new User();
+                    user.setName("John Doe");
+                    user.setEmail("john.doe@example.com");
+
+                    // Modify the transient object
+                    user.setEmail("new.email@example.com");
+
+                    // No session interaction, so no dirty checking occurs
+
+->Summary:
+1)Persistent Objects: Hibernate performs dirty checking on persistent objects. Changes made to these objects within a transaction are automatically detected and synchronized with the database when the transaction is committed.
+2)Transient Objects: Transient objects are not managed by Hibernate. Changes to transient objects are not tracked, and dirty checking does not apply. To persist changes made to a transient object, it must be explicitly saved or persisted, transitioning it to a persistent state.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+<property name="hibernate.hbm2ddl.auto">create</property>
+  ->The above property will help us to create a table in our db with hibernate framework.
+
+ex:
+   
+    @Entity
+    public class Student{
+
+        @Id
+        @GeneratedValue(strategy=GenerationType.IDENTITY)
+        private String id;
+
+        @Column(name="student_name)
+        private String name;
+
+        @Column(name="student_mobile)
+        private long mobile;
+
+        @Embedded          ----------->OPTIONAL
+        private Address address;
+
+        getters and setters.......
+
+    }
 
 
+    @Embeddable
+    public class Address
+    {
+        @Column(name="address_line_1")
+        public String addressLine1;
 
+        @Column(name="address_line_2")
+        public String addressLine2;
+
+        @Column(name="city")
+        public String city;
+
+        getters and setters.........
+    }
+
+->In jpa terminology Address is embeddable object and in hibernate terminology Address is composite value type object.
+->Student is an entity and Address is a value type.Becasue Student has an id and Address does'nt have an id.
+->A value type always belongs to an enitty type.
+
+1)Entities:Entities are objects that have their own lifecycle and identity. They are typically mapped to a database table, and each entity instance corresponds to a row in that table. Entities can be identified by a unique identifier (primary key).
+
+Characteristics of Entities:
+->Identity: Each entity has a unique identifier (primary key).
+->Lifecycle: Entities have their own lifecycle managed by Hibernate (transient, persistent, detached).
+->Persistence: Changes to entities are automatically synchronized with the database.
+->Associations: Entities can have relationships with other entities (one-to-one, one-to-many, many-to-one, many-to-many).
+
+ex:
+            @Entity
+            @Table(name = "users")
+            public class User {
+                @Id
+                @GeneratedValue(strategy = GenerationType.IDENTITY)
+                private Long id;
+                
+                private String name;
+                private String email;
+                
+                // Getters and setters
+            }
+
+2)Value Types:Value types (also known as value objects or component types) do not have their own identity. They are usually dependent on an entity and are used to represent a part of an entity. Value types are embedded within an entity and do not exist independently.
+
+Characteristics of Value Types:
+->No Identity: Value types do not have a primary key.
+->Dependent Lifecycle: The lifecycle of value types is tied to the lifecycle of the owning entity.
+->Embeddable: Value types are embedded within entities and are not stored in separate tables.
+
+ex:
+        @Embeddable
+        public class Address {
+            private String street;
+            private String city;
+            private String zipcode;
+            
+            // Getters and setters
+        }
+
+        @Entity
+        @Table(name = "users")
+        public class User {
+            @Id
+            @GeneratedValue(strategy = GenerationType.IDENTITY)
+            private Long id;
+            
+            private String name;
+            private String email;
+            
+            @Embedded
+            private Address address;
+            
+            // Getters and setters
+        }
+
+Summary:
+->Entities: Have their own identity (primary key), lifecycle managed by Hibernate, can be persisted independently, and can have relationships with other entities.
+->Value Types: Do not have an identity, their lifecycle is tied to the owning entity, are embedded within entities, and are used to represent parts of an entity.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
