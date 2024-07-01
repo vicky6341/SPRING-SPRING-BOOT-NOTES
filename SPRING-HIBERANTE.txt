@@ -102,3 +102,72 @@ public class HibernateUtils
       }
 }
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+->@GeneratedValue(strategy=GenerationType.IDENTITY) which indicates that db is responsible to generate primary key and map that key to the id of an entity.
+ex:
+  session.beginTransaction();    
+  session.save(obj);                   ---->(1)
+  session.getTransaction().commit();   ---->(2)
+       ->after executing the line (1) data will not be saved into actual db.It will be persisted after commiting only it will be saved into the db.
+       ->While executing the line (1) itself the hibernate will generate the query but the data will not be saved into db.
+
+->In Hibernate, an object can be in one of three states: transient, persistent, or detached. These states define the lifecycle of a Hibernate-managed entity 
+and dictate how Hibernate manages the object's lifecycle with respect to the database. Here's a detailed explanation of each state:
+1)Transient State: An object is in the transient state when it is created but not yet associated with a Hibernate session. 
+                   It does not have a corresponding record in the database, and Hibernate is not aware of its existence.
+->Creation: The object is created using the new operator.
+->No Database Representation: There is no corresponding row in the database.
+->Not Managed by Hibernate: Hibernate does not track changes to this object.
+
+ ex:
+        // Create a transient object
+        User user = new User();
+        user.setName("John Doe");
+        user.setEmail("john.doe@example.com");
+    
+2)Persistent State:An object is in the persistent state when it is associated with an active Hibernate session. 
+                  Hibernate tracks changes to the object and synchronizes these changes with the database.
+
+->Managed by Hibernate: The object is associated with a session, and Hibernate tracks its state.
+->Database Representation: There is a corresponding row in the database.
+->Automatic Synchronization: Changes to the object's properties are automatically synchronized with the database.
+
+ex:
+                Session session = sessionFactory.openSession();
+                session.beginTransaction();
+
+                // The object is now in the persistent state
+                session.save(user);  // user becomes persistent
+
+                // Changes to the object are automatically saved to the database
+                user.setEmail("new.email@example.com");
+
+                session.getTransaction().commit();
+                session.close();
+
+3) Detached State:An object is in the detached state when it was once associated with a Hibernate session but is no longer associated with any session.
+                   The object is no longer being tracked by Hibernate.
+
+->Previously Persistent: The object was once in the persistent state but the session has been closed or cleared.
+->No Longer Managed: Hibernate is no longer tracking changes to the object.
+->Manual Synchronization: Changes to the object's properties are not automatically synchronized with the database.
+
+ ex:
+   
+            // Assume the session is closed, user is now detached
+            Session newSession = sessionFactory.openSession();
+            newSession.beginTransaction();
+
+            // Attach the detached object to a new session to make it persistent again
+            newSession.update(user);
+            user.setName("Updated Name");
+
+            newSession.getTransaction().commit();
+            newSession.close();
+
+->Summary:
+1)Transient State: The object is not associated with a session and not represented in the database.
+2)Persistent State: The object is associated with an active session and is represented in the database. Changes to the object are automatically synchronized with the database.
+3)Detached State: The object was previously persistent but is no longer associated with any session. Changes to the object are not synchronized with the database unless explicitly reattached to a session.
+
+
+
