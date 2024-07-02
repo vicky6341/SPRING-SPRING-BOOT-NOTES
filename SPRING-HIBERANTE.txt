@@ -318,3 +318,43 @@ Summary:
 ->Entities: Have their own identity (primary key), lifecycle managed by Hibernate, can be persisted independently, and can have relationships with other entities.
 ->Value Types: Do not have an identity, their lifecycle is tied to the owning entity, are embedded within entities, and are used to represent parts of an entity.
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1)public class Address{
+
+    public String addressline1;
+
+    public String addressline2;
+
+    public String city;
+
+    public String country;
+}
+
+
+2)@Entity
+public class Student{
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private int id;
+
+    @Column(name="student_name")
+    private String name;
+
+    @Embedded
+    @AttributeOverrides({@AttributeOverride(name="addressline1",column=@Column(name="home_address_line1")),
+                          @AttributeOverride(name="addressline2",column=@Column(name="home_address_line2")),
+                          @AttributeOverride(name="city",column=@Column(name="home_city")),
+                          @AttributeOverride(name="country",column=@Column(name="home_country"))})
+    private Address homeAddress;
+
+    @Embedded
+    @AttributeOverrides({@AttributeOverride(name="addressline1",column=@Column(name="hostel_address_line1")),
+                          @AttributeOverride(name="addressline2",column=@Column(name="hostel_address_line2")),
+                          @AttributeOverride(name="city",column=@Column(name="hostel_city")),
+                          @AttributeOverride(name="country",column=@Column(name="hostel_country"))})
+    private Address hostelAddress;
+}
+
+->In the above example ,we are using the same Address object for home address and hostel address.
+-------------------------------------------------------------------------------------------------------------------------------------------
