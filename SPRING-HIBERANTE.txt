@@ -358,3 +358,67 @@ public class Student{
 
 ->In the above example ,we are using the same Address object for home address and hostel address.
 -------------------------------------------------------------------------------------------------------------------------------------------
+->Hibernate is a vendor for JPA.
+->HQL -Hibernate Query Language.
+1)          {
+                Query<Student> q=session.creteQuery("from Student s",Student.class);   ->Select all Student records
+                List<Student> ls=q.list();
+                for(Student s:ls)
+                System.out.println(s);
+            }
+
+2)          {
+                String hql="from Student s where s.age=?1";               ->findStudentByAge
+
+                Query<Student> q=session.createQuery(hql,Student.class);
+                q.setParameter(1,age);
+
+                List<Student> ls=q.list();
+                ls.forEach(System.out::println);
+            }
+
+3)          {
+                String hql="from Student s where s.age=?1 and s.name=?2";               ->findStudentByAgeAndName
+
+                Query<Student> q=session.createQuery(hql,Student.class);
+                q.setParameter(1,age);
+                q.setParameter(2,name);
+
+                List<Student> ls=q.list();
+                ls.forEach(System.out::println);
+            }
+
+3)          public static void findStudentByAge(int minAge,int maxAge)
+            {
+               String hql="from Student s where s.age between ?1 and ?2"
+               Query<Student> q=session.creteQuery(hql,Student.class);
+               q.setParameter(1,minAge);
+               q.setParameter(2,maxAge);
+
+               List<Student> ls=q.list();
+               ls.forEach(System.out::println);
+            }
+
+4)          {
+              Query<String> q=session.createQuery("select s.name from Student s",String.class);
+              List<String> ls=q.list();
+
+              for(String name:ls)
+              {
+                 System.out.println(name);
+              }              
+            }
+
+5)          {
+              Query<Object[]> q=session.createQuery("select s.name,s.age from Student s");
+              List<Object[]> ls=q.list();
+              for(Object obj:ls)
+              {
+                System.out.println(obj[0]+" "+obj[1]);
+              }
+            }
+
+?1 replace with :var 
+q.setParameter(1,age) -> q.setParameter("var",age)
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
