@@ -421,4 +421,66 @@ public class Student{
 ?1 replace with :var 
 q.setParameter(1,age) -> q.setParameter("var",age)
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+1)
+   @Entity
+   @NamedQuery(name="myapp.allstudents",query="from Student")
+   public class Student{
 
+    ....
+    ....
+    ....
+
+   }
+ 
+   public class Test{
+
+    public static void findAll(){
+        List<Student> studentList=session.createNamedQuery("myapp.allstudents",Student.class).list();
+        studentList.forEach(system.out::println);
+    }
+
+   }
+
+2)
+          @Entity
+          @NamedQuery(name="myapp.students.age",Query="from Student s where s.age=:age")
+          public class Student{
+
+            .....
+            .....
+            .....
+
+          }
+
+          public class Test{
+
+            public static void findByAge(){
+                List<Student> studentList=session.createNamedQuery("myapp.students.age",Student.class)
+                                                .setParameter("age",33).list();
+                studentList.forEach(System.out::println);
+            }
+
+          }
+
+->If we want to define multiple named queries,We have to do it in the following way:
+
+ @NamedQueries(
+
+    value={
+
+         @NamedQuery(name="myapp.students.age",Query="from Student s where s.age=:age"),
+         @NamedQuery(name="myapp.allstudents",query="from Student")
+
+    }
+
+ )
+
+ ->If we want to create a native query,We have to it in the following way:
+   
+1)   List<Student> studentList=session.createNativeQuery("select * from students where student_name='vivek'",Student.class);
+2)   List<Student> studentList=session.createNativeQuery("select * from students where student_name='vivek can''t'",Student.class);
+                 ->If we have single quote in name itself,we have to use two single quotes as mentioned above.
+
+list() -> to get records.
+executeUpdate() -> to update and delete records.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
