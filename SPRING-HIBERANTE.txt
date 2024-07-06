@@ -484,3 +484,60 @@ q.setParameter(1,age) -> q.setParameter("var",age)
 list() -> to get records.
 executeUpdate() -> to update and delete records.
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+1)One To One Mapping:
+    ->In one-one relationship,eigther of the primary key of two tables can act as foreign key of other table.
+    ex: Student - passport  (student - owns - passport)
+
+*Student Entity:
+
+            @Entity
+            @Table(name="Student")
+            public class Student{
+
+                @Id
+                @GeneratedValue(strategy=GenerationType.IDENTITY)
+                @Column(name="student_id")
+                private int id;
+
+                @Column(name="student_name")
+                private String studentName;
+
+                @OneToOne
+                @JoinColumn(name="passport_id")
+                private Passport passport;
+
+            }
+
+*Passport Entity:
+
+        @entity
+        @Table(name="Passport")
+        public class Passport{
+
+            @Id
+            @GeneratedValue(strategy=GenerationType.IDENTITY)
+            @Column(name="passport_id")
+            private int id;
+
+            @Column(name="passport_number")
+            private String passportName;
+        }
+
+->If i want to save/delete the passport obj(child) while saving the Student obj(parent) then we have to do the following:
+   
+     @OneToOne(cascade=CascadeType.ALL)
+
+->If we want to get parent obj data while fetching the data from child obj,we have to do the following:(BIDIRECTIONAL MAPPING)
+ 
+    @Entity
+    @Table(....)
+    public class Passport{
+
+        ....
+        ...
+
+        @OneToOne(mapppedBy="passport")   ->here the name passport will be the name of variable that was declared in the parent entity.
+        private Student student;
+    }
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
