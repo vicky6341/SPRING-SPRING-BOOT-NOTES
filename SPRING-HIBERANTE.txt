@@ -540,4 +540,48 @@ executeUpdate() -> to update and delete records.
         private Student student;
     }
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Summary of Cascade and Fetch in @OneToOne Relationship:
+1)Cascade Types:
+        CascadeType.PERSIST: When the parent entity is saved, the related entity is also saved.
+        CascadeType.MERGE: When the parent entity is merged, the related entity is also merged.
+        CascadeType.REMOVE: When the parent entity is deleted, the related entity is also deleted.
+        CascadeType.REFRESH: When the parent entity is refreshed, the related entity is also refreshed.
+        CascadeType.DETACH: When the parent entity is detached from the session, the related entity is also detached.
+        CascadeType.ALL: Applies all the above cascade types.
+2)Fetch Types:
+            FetchType.LAZY: The related entity is loaded on-demand when accessed for the first time.
+            FetchType.EAGER: The related entity is loaded immediately along with the parent entity.
+
+ex:
+                    @Entity
+                    public class User {
+                        @Id
+                        @GeneratedValue(strategy = GenerationType.IDENTITY)
+                        private Long id;
+                        
+                        private String name;
+                        
+                        @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+                        private UserProfile profile;
+                        
+                        // Getters and setters
+                    }
+
+                    @Entity
+                    public class UserProfile {
+                        @Id
+                        @GeneratedValue(strategy = GenerationType.IDENTITY)
+                        private Long id;
+                        
+                        private String bio;
+                        
+                        @OneToOne
+                        @JoinColumn(name = "user_id")
+                        private User user;
+                        
+                        // Getters and setters
+                    }
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
